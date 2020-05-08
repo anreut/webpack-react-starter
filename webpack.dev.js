@@ -4,11 +4,20 @@ const autoprefixer = require('autoprefixer');
 
 module.exports = {
   mode: 'development',
-  entry: './src/index.js',
+  entry: './src/index.tsx',
   output: {
     path: path.join(__dirname, 'dist'),
     filename: 'main.bundle.js',
     publicPath: '/',
+  },
+  resolve: {
+    extensions: ['.ts', '.tsx', '.js'],
+  },
+  externals: {
+    // prettier-ignore
+    "react": "React",
+    // prettier-ignore
+    "react-dom": "ReactDOM"
   },
   module: {
     rules: [
@@ -16,6 +25,11 @@ module.exports = {
         test: /\.(js|jsx)$/,
         exclude: /node_modules/,
         use: 'babel-loader',
+      },
+      {
+        test: /\.(ts|tsx)$/,
+        exclude: /node_modules/,
+        use: 'ts-loader',
       },
       {
         test: /\.css$/i,
@@ -52,6 +66,11 @@ module.exports = {
       {
         test: /\.(woff|woff2|eot|ttf|otf)$/,
         use: ['file-loader'],
+      },
+      {
+        enforce: 'pre',
+        test: /\.js$/,
+        loader: 'source-map-loader',
       },
     ],
   },

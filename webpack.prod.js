@@ -8,10 +8,19 @@ const autoprefixer = require('autoprefixer');
 
 module.exports = {
   mode: 'production',
-  entry: './src/index.js',
+  entry: './src/index.tsx',
   output: {
     path: path.join(__dirname, 'dist'),
     filename: 'main.[contentHash].js',
+  },
+  resolve: {
+    extensions: ['.ts', '.tsx', '.js'],
+  },
+  externals: {
+    // prettier-ignore
+    "react": "React",
+    // prettier-ignore
+    "react-dom": "ReactDOM"
   },
   optimization: {
     minimize: true,
@@ -42,6 +51,11 @@ module.exports = {
         use: 'babel-loader',
       },
       {
+        test: /\.(ts|tsx)$/,
+        exclude: /node_modules/,
+        use: 'ts-loader',
+      },
+      {
         test: /\.css$/i,
         use: ['style-loader', 'css-loader'],
       },
@@ -66,6 +80,11 @@ module.exports = {
       {
         test: /\.(woff|woff2|eot|ttf|otf)$/,
         use: ['file-loader'],
+      },
+      {
+        enforce: 'pre',
+        test: /\.js$/,
+        loader: 'source-map-loader',
       },
     ],
   },
